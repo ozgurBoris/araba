@@ -107,9 +107,9 @@ function handleGyroData(event) {
         const normalizedTilt = Math.max(-maxTilt, Math.min(maxTilt, adjustedGamma));
         const movement = (normalizedTilt / maxTilt) * sensitivity;
         
-        // Arabayı hareket ettir
+        // Arabayı hareket ettir (yol kenarları 100px + 20px margin)
         car.x += movement;
-        car.x = Math.max(100, Math.min(canvas.width - car.width - 100, car.x));
+        car.x = Math.max(120, Math.min(canvas.width - car.width - 120, car.x));
     }
 }
 
@@ -169,10 +169,9 @@ function setupTouchControls() {
         const targetX = touchX - car.width / 2;
         const currentX = car.x;
         const diff = targetX - currentX;
-        
-        if (Math.abs(diff) > 5) {
+          if (Math.abs(diff) > 5) {
             car.x += diff * 0.1; // Smooth movement
-            car.x = Math.max(100, Math.min(canvas.width - car.width - 100, car.x));
+            car.x = Math.max(120, Math.min(canvas.width - car.width - 120, car.x));
         }
     });
     
@@ -300,17 +299,9 @@ function resetGame() {
     car.y = canvas.height - 100;
     obstacles = [];
     obstacleTimer = 0;
-    roadLines = [];
     
     // Yol çizgilerini oluştur
-    for (let i = 0; i < canvas.height; i += 60) {
-        roadLines.push({
-            x: canvas.width / 2 - 2,
-            y: i,
-            width: 4,
-            height: 30
-        });
-    }
+    resetRoadLines();
     
     updateScore();
     updateSpeed();
@@ -558,7 +549,8 @@ function drawMuscleCar() {
 }
 
 function createObstacle() {
-    const lanes = [150, 250, 350, 450, 550];
+    // 800px genişlik için şerit pozisyonları (yol kenarları 100px)
+    const lanes = [150, 250, 350, 450, 550, 650];
     const lane = lanes[Math.floor(Math.random() * lanes.length)];
     const colors = ['#e74c3c', '#9b59b6', '#3498db', '#e67e22', '#1abc9c'];
     const carType = Math.floor(Math.random() * 6); // 0-5 arası araba tipi
@@ -695,18 +687,18 @@ function drawRoad() {
     ctx.fillStyle = '#34495e';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
-    // Yol kenarları
+    // Yol kenarları (100px her yanında)
     ctx.fillStyle = '#2c3e50';
     ctx.fillRect(0, 0, 100, canvas.height);
     ctx.fillRect(canvas.width - 100, 0, 100, canvas.height);
     
-    // Yol çizgileri
+    // Orta yol çizgisi
     ctx.fillStyle = '#f39c12';
     roadLines.forEach(line => {
         ctx.fillRect(line.x, line.y, line.width, line.height);
     });
     
-    // Şerit çizgileri
+    // Şerit çizgileri (100px aralıklarla)
     ctx.fillStyle = '#bdc3c7';
     for (let i = 200; i < canvas.width - 100; i += 100) {
         roadLines.forEach(line => {
@@ -730,7 +722,7 @@ function checkCollision() {
 function update() {
     if (gameState !== 'playing') return;
     
-    // Araba kontrolü
+    // Araba kontrolü (yol kenarları 100px)
     if (keys['ArrowLeft'] && car.x > 120) {
         car.x -= car.speed;
     }
@@ -917,22 +909,29 @@ window.selectCar = function(index) {
 
 // Canvas boyutlarını responsive yapmak
 function resizeCanvas() {
-    const container = canvas.parentElement;
-    const containerWidth = container.clientWidth;
-    const containerHeight = container.clientHeight;
-    
-    // Mobil için canvas boyutlarını ayarla
-    if (isMobileDevice()) {
-        canvas.width = Math.min(400, containerWidth - 20);
-        canvas.height = Math.min(600, containerHeight - 20);
-    } else {
-        canvas.width = 400;
-        canvas.height = 600;
-    }
+    // Canvas boyutlarını sabit tut - responsive bozulmasını önle
+    canvas.width = 800;
+    canvas.height = 600;
     
     // Araba pozisyonunu yeniden ayarla
     car.x = (canvas.width - car.width) / 2;
     car.y = canvas.height - car.height - 50;
+    
+    // Yol çizgilerini yeniden oluştur
+    resetRoadLines();
+}
+
+// Yol çizgilerini yeniden oluşturma fonksiyonu
+function resetRoadLines() {
+    roadLines = [];
+    for (let i = 0; i < canvas.height; i += 60) {
+        roadLines.push({
+            x: canvas.width / 2 - 2,
+            y: i,
+            width: 4,
+            height: 30
+        });
+    }
 }
 
 // Jiroskop kontrol butonlarını ekle
