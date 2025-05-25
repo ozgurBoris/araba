@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Araba Yarışı Oyunu</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="header">
+            <h1>🏎️ Araba Yarışı</h1>
+            <div class="score-container">
+                <div class="score">Puan: <span id="score">0</span></div>
+                <div class="money">💰 Para: <span id="money">0</span></div>
+                <div class="speed">Hız: <span id="speed">0</span> km/h</div>
+            </div>
+            <button id="shopBtn" class="shop-button">🏪 Dükkan</button>
+        </div>
+        
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        
+        <div class="controls">
+            <div class="control-info">
+                <p>🎮 Kontroller:</p>
+                <p>⬅️ ➡️ Sağa/Sola hareket</p>
+                <p>⬆️ Hızlan</p>
+                <p>⬇️ Yavaşla</p>
+                <p>🎯 Engelleri geç ve puan kazan!</p>
+            </div>
+        </div>
+        
+        <div id="gameOver" class="game-over hidden">
+            <h2>Oyun Bitti!</h2>
+            <p>Final Puanın: <span id="finalScore">0</span></p>
+            <button id="restartBtn">Tekrar Oyna</button>
+        </div>
+        
+        <div id="startScreen" class="start-screen">
+            <h2>Araba Yarışı Oyunu</h2>
+            <p>Engelleri geçerek en yüksek puanı almaya çalış!</p>
+            <button id="startBtn">Oyunu Başlat</button>
+        </div>
+        
+        <!-- Dükkan Ekranı -->
+        <div id="shopScreen" class="shop-screen hidden">
+            <div class="shop-content">
+                <h2>🏪 Araba Dükkanı</h2>
+                <div class="current-car">
+                    <h3>Mevcut Arabanız:</h3>
+                    <div id="currentCarDisplay" class="car-display"></div>
+                </div>
+                <div class="cars-grid" id="carsGrid">
+                    <!-- Arabalar buraya JavaScript ile eklenecek -->
+                </div>
+                <div class="shop-buttons">
+                    <button id="closeShopBtn" class="shop-btn secondary">Kapat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+      <script src="script_new.js"></script>
+</body>
+</html>
